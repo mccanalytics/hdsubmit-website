@@ -260,95 +260,6 @@
             justify-content: center;
             animation: fadeInUp 0.8s ease-out 0.3s both;
         }
-        .hero-card {
-            background: var(--color-white);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow-lg);
-            max-width: 420px;
-            width: 100%;
-            position: relative;
-        }
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 22px;
-            background: linear-gradient(135deg, var(--color-accent-soft), var(--color-primary-light));
-            z-index: -1;
-            opacity: 0.5;
-        }
-        .hero-card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--color-border);
-        }
-        .hero-card-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: var(--color-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .hero-card-icon svg {
-            width: 24px;
-            height: 24px;
-            stroke: var(--color-primary);
-        }
-        .hero-card-title {
-            font-weight: 700;
-            color: var(--color-dark);
-        }
-        .hero-card-subtitle {
-            font-size: 0.825rem;
-            color: var(--color-muted);
-        }
-        .status-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-        }
-        .status-row + .status-row {
-            border-top: 1px solid rgba(203,213,225,0.4);
-        }
-        .status-label {
-            font-size: 0.9rem;
-            color: var(--color-muted);
-        }
-        .status-value {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--color-dark);
-        }
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .status-badge.success {
-            background: rgba(16,185,129,0.1);
-            color: #059669;
-        }
-        .status-badge.success::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #10B981;
-        }
 
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(24px); }
@@ -759,39 +670,7 @@
             </div>
         </div>
         <div class="hero-visual">
-            <div class="hero-card">
-                <div class="hero-card-header">
-                    <div class="hero-card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="hero-card-title">Data Submission Status</div>
-                        <div class="hero-card-subtitle">Real-time monitoring</div>
-                    </div>
-                </div>
-                <div class="status-row">
-                    <span class="status-label">EMResource API</span>
-                    <span class="status-badge success">Connected</span>
-                </div>
-                <div class="status-row">
-                    <span class="status-label">BedSync</span>
-                    <span class="status-badge success">Compliant</span>
-                </div>
-                <div class="status-row">
-                    <span class="status-label">Respiratory Data</span>
-                    <span class="status-badge success">Active</span>
-                </div>
-                <div class="status-row">
-                    <span class="status-label">Last Submission</span>
-                    <span class="status-value">2 min ago</span>
-                </div>
-                <div class="status-row">
-                    <span class="status-label">Success Rate</span>
-                    <span class="status-value">99.8%</span>
-                </div>
-            </div>
+            <img src="hdsubmit_v2_black.png" alt="HDSubmit" style="max-width: 400px; width: 100%;">
         </div>
     </div>
 </section>
