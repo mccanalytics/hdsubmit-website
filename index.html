@@ -775,37 +775,7 @@
         <div class="section-label">Connect With Us</div>
         <h2 class="section-heading">Helping Healthcare Institutions Succeed</h2>
         <p class="section-sub">Get in touch and we'll help you streamline your data submission process.</p>
-        <div class="contact-form">
-            <form id="contactForm" action="contact.php" method="POST">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>First Name <span class="required">*</span></label>
-                        <input type="text" name="first_name" required placeholder="John">
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" name="last_name" placeholder="Doe">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Contact Email <span class="required">*</span></label>
-                    <input type="email" name="email" required placeholder="john@hospital.org">
-                </div>
-                <div class="form-group">
-                    <label>What do you need help with? <span class="required">*</span></label>
-                    <textarea name="message" required placeholder="Tell us about your data submission needs..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary form-submit">Submit</button>
-            </form>
-            <div class="form-success" id="formSuccess">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                    <polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-                <h3>Message Sent!</h3>
-                <p>We'll get back to you as soon as possible.</p>
-            </div>
-        </div>
+        <a href="mailto:info@hdsubmit.com" class="btn btn-primary" style="font-size: 1.1rem;">info@hdsubmit.com</a>
     </div>
 </section>
 
@@ -846,13 +816,6 @@
         });
     });
 
-    // Show success message if redirected back after form submission
-    if (window.location.search.includes('submitted=1')) {
-        const contactForm = document.getElementById('contactForm');
-        const formSuccess = document.getElementById('formSuccess');
-        contactForm.style.display = 'none';
-        formSuccess.classList.add('show');
-    }
 </script>
 
 </body>
