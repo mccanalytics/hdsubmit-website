@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDSubmit | BedSync — Effortless Hospital Data Submission</title>
+    <meta name="description" content="Empowering hospitals with effortless data submission tools. Simplifying API-based data submission for EMResource, BedSync, and Hospital Respiratory Disease data sets.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #0B4F6C;
+            --color-primary-light: #1A7FA8;
+            --color-accent: #00B4D8;
+            --color-accent-soft: #90E0EF;
+            --color-dark: #0A1628;
+            --color-body: #334155;
+            --color-muted: #64748B;
+            --color-light: #F0F9FF;
+            --color-white: #FFFFFF;
+            --color-border: #CBD5E1;
+            --color-success: #10B981;
+            --font-display: 'Instrument Serif', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+            --shadow-sm: 0 1px 3px rgba(11,79,108,0.08);
+            --shadow-md: 0 4px 20px rgba(11,79,108,0.10);
+            --shadow-lg: 0 12px 40px rgba(11,79,108,0.12);
+            --radius: 12px;
+            --max-width: 1140px;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-body);
+            line-height: 1.7;
+            background: var(--color-white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- NAV ---- */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(203,213,225,0.5);
+            transition: box-shadow 0.3s;
+        }
+        .nav.scrolled {
+            box-shadow: var(--shadow-sm);
+        }
+        .nav-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--color-primary);
+        }
+        .nav-logo-icon {
+            width: 36px;
+            height: 36px;
+        }
+        .nav-logo-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+        .nav-logo-text span {
+            color: var(--color-accent);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-body);
+            font-size: 0.925rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+        .nav-cta {
+            background: var(--color-primary);
+            color: var(--color-white) !important;
+            padding: 10px 22px;
+            border-radius: 8px;
+            transition: background 0.2s, transform 0.15s !important;
+        }
+        .nav-cta:hover {
+            background: var(--color-primary-light);
+            transform: translateY(-1px);
+        }
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .nav-toggle svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--color-dark);
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            padding: 160px 2rem 100px;
+            background: linear-gradient(165deg, var(--color-light) 0%, #E0F2FE 40%, #BAE6FD 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,180,216,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(11,79,108,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,180,216,0.12);
+            color: var(--color-primary);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.825rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-success);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--color-dark);
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+        .hero h1 em {
+            color: var(--color-primary);
+            font-style: italic;
+        }
+        .hero-sub {
+            font-size: 1.125rem;
+            color: var(--color-muted);
+            max-width: 480px;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--color-primary);
+            color: var(--color-white);
+        }
+        .btn-primary:hover {
+            background: var(--color-primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(11,79,108,0.25);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+        .btn-outline:hover {
+            background: var(--color-primary);
+            color: var(--color-white);
+            transform: translateY(-2px);
+        }
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+        .hero-card {
+            background: var(--color-white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+        }
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--color-accent-soft), var(--color-primary-light));
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .hero-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .hero-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--color-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-card-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--color-primary);
+        }
+        .hero-card-title {
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+        .hero-card-subtitle {
+            font-size: 0.825rem;
+            color: var(--color-muted);
+        }
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .status-row + .status-row {
+            border-top: 1px solid rgba(203,213,225,0.4);
+        }
+        .status-label {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+        }
+        .status-value {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--color-dark);
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-badge.success {
+            background: rgba(16,185,129,0.1);
+            color: #059669;
+        }
+        .status-badge.success::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10B981;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---- FOCUS SECTION ---- */
+        .focus {
+            padding: 100px 2rem;
+            background: var(--color-white);
+        }
+        .focus-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+        }
+        .section-heading {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            color: var(--color-dark);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .section-sub {
+            color: var(--color-muted);
+            max-width: 540px;
+            margin-bottom: 3.5rem;
+            font-size: 1.05rem;
+        }
+        .focus-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .focus-card {
+            background: var(--color-light);
+            border-radius: var(--radius);
+            padding: 2rem 1.75rem;
+            transition: transform 0.25s, box-shadow 0.25s;
+            border: 1px solid transparent;
+        }
+        .focus-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-accent-soft);
+        }
+        .focus-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--color-accent);
+            line-height: 1;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        .focus-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 0.75rem;
+        }
+        .focus-card p {
+            font-size: 0.925rem;
+            color: var(--color-muted);
+            line-height: 1.6;
+        }
+
+        /* ---- FEATURES ---- */
+        .features {
+            padding: 100px 2rem;
+            background: var(--color-dark);
+            color: var(--color-white);
+            position: relative;
+            overflow: hidden;
+        }
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(0,180,216,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(11,79,108,0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .features-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .features .section-label {
+            color: var(--color-accent-soft);
+        }
+        .features .section-heading {
+            color: var(--color-white);
+        }
+        .features .section-sub {
+            color: rgba(255,255,255,0.6);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: background 0.25s, border-color 0.25s;
+        }
+        .feature-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(0,180,216,0.3);
+        }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(0,180,216,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        }
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--color-accent);
+        }
+        .feature-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.6;
+        }
+
+        /* ---- CONTACT ---- */
+        .contact {
+            padding: 100px 2rem;
+            background: var(--color-light);
+        }
+        .contact-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .contact .section-heading {
+            margin-bottom: 0.5rem;
+        }
+        .contact .section-sub {
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+        .contact-form {
+            background: var(--color-white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            text-align: left;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-dark);
+            margin-bottom: 6px;
+        }
+        .form-group label .required {
+            color: #EF4444;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--color-border);
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--color-dark);
+            background: var(--color-white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(0,180,216,0.12);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .form-submit {
+            width: 100%;
+            padding: 14px;
+            margin-top: 0.5rem;
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        .form-success.show {
+            display: block;
+        }
+        .form-success svg {
+            width: 56px;
+            height: 56px;
+            stroke: var(--color-success);
+            margin-bottom: 1rem;
+        }
+        .form-success h3 {
+            font-size: 1.25rem;
+            color: var(--color-dark);
+            margin-bottom: 0.5rem;
+        }
+        .form-success p {
+            color: var(--color-muted);
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            background: var(--color-dark);
+            color: rgba(255,255,255,0.5);
+            padding: 3rem 2rem;
+        }
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--color-white);
+        }
+        .footer-logo span {
+            color: var(--color-accent);
+        }
+        .footer-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255,255,255,0.15);
+        }
+        .footer-mcc {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.35);
+        }
+        .footer-mcc a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-mcc a:hover {
+            color: var(--color-accent);
+        }
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .footer-links a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: var(--color-white);
+        }
+        .footer-copy {
+            font-size: 0.825rem;
+        }
+
+        /* ---- MOBILE ---- */
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+            .hero-sub {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .focus-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 640px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 72px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: var(--color-white);
+                padding: 1.5rem 2rem;
+                gap: 1rem;
+                border-bottom: 1px solid var(--color-border);
+                box-shadow: var(--shadow-md);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .nav-toggle {
+                display: block;
+            }
+            .hero {
+                padding: 140px 1.5rem 80px;
+            }
+            .focus-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">
+            <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+                <rect width="36" height="36" rx="8" fill="#0B4F6C"/>
+                <path d="M10 13h6v10h-6zM20 13h6v10h-6z" fill="#00B4D8" opacity="0.8"/>
+                <path d="M13 10h10v4H13z" fill="#90E0EF"/>
+                <path d="M13 22h10v4H13z" fill="#90E0EF"/>
+            </svg>
+            <span class="nav-logo-text">HD<span>Submit</span></span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#focus">About</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="privacy.html">Privacy</a></li>
+            <li><a href="#contact" class="nav-cta">Get Started</a></li>
+        </ul>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-content">
+            <div class="hero-badge">BedSync Compliant</div>
+            <h1>Empowering Hospitals with <em>Effortless</em> Data Submission</h1>
+            <p class="hero-sub">Simplifying the process of submitting API-based data for EMResource. BedSync and Hospital Respiratory Disease data set compliant.</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">Get More Information</a>
+                <a href="#features" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-card">
+                <div class="hero-card-header">
+                    <div class="hero-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="hero-card-title">Data Submission Status</div>
+                        <div class="hero-card-subtitle">Real-time monitoring</div>
+                    </div>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">EMResource API</span>
+                    <span class="status-badge success">Connected</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">BedSync</span>
+                    <span class="status-badge success">Compliant</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Respiratory Data</span>
+                    <span class="status-badge success">Active</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Last Submission</span>
+                    <span class="status-value">2 min ago</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Success Rate</span>
+                    <span class="status-value">99.8%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOCUS -->
+<section class="focus" id="focus">
+    <div class="focus-inner">
+        <div class="section-label">Our Focus</div>
+        <h2 class="section-heading">Built for healthcare data teams</h2>
+        <p class="section-sub">We're dedicated to making hospital data submission seamless, reliable, and stress-free.</p>
+        <div class="focus-grid">
+            <div class="focus-card">
+                <div class="focus-number">01</div>
+                <h3>Innovative Solutions</h3>
+                <p>We are dedicated to optimizing data submission workflows with tools designed for modern healthcare environments.</p>
+            </div>
+            <div class="focus-card">
+                <div class="focus-number">02</div>
+                <h3>Streamlined Process</h3>
+                <p>Our platform minimizes complexities for healthcare institutions, reducing manual steps and potential errors.</p>
+            </div>
+            <div class="focus-card">
+                <div class="focus-number">03</div>
+                <h3>Effortless Submission</h3>
+                <p>Designed to enhance the experience of data submission so your team can focus on what matters most — patient care.</p>
+            </div>
+            <div class="focus-card">
+                <div class="focus-number">04</div>
+                <h3>Dedicated Assistance</h3>
+                <p>We provide ongoing support to our users for maximum efficiency and peace of mind with every submission.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+    <div class="features-inner">
+        <div class="section-label">Capabilities</div>
+        <h2 class="section-heading">Everything you need for compliant submissions</h2>
+        <p class="section-sub">Purpose-built tools for healthcare data reporting requirements.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3>EMResource Integration</h3>
+                <p>Direct API-based connectivity to EMResource for real-time data submissions without manual intervention.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <h3>BedSync Compliance</h3>
+                <p>Full compliance with BedSync data set requirements, ensuring your facility meets reporting standards.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <h3>Respiratory Disease Reporting</h3>
+                <p>Hospital Respiratory Disease data set compliant submissions, keeping pace with evolving public health mandates.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <h3>Real-Time Monitoring</h3>
+                <p>Track submission status and success rates in real time so nothing falls through the cracks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <h3>Automated Scheduling</h3>
+                <p>Set it and forget it — schedule recurring data submissions at the intervals your facility requires.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h3>Dedicated Support</h3>
+                <p>Our team is here to help with setup, troubleshooting, and ongoing optimization of your submission workflows.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+    <div class="contact-inner">
+        <div class="section-label">Connect With Us</div>
+        <h2 class="section-heading">Helping Healthcare Institutions Succeed</h2>
+        <p class="section-sub">Get in touch and we'll help you streamline your data submission process.</p>
+        <div class="contact-form">
+            <form id="contactForm" action="contact.php" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name <span class="required">*</span></label>
+                        <input type="text" name="first_name" required placeholder="John">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" placeholder="Doe">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Contact Email <span class="required">*</span></label>
+                    <input type="email" name="email" required placeholder="john@hospital.org">
+                </div>
+                <div class="form-group">
+                    <label>What do you need help with? <span class="required">*</span></label>
+                    <textarea name="message" required placeholder="Tell us about your data submission needs..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary form-submit">Submit</button>
+            </form>
+            <div class="form-success" id="formSuccess">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <h3>Message Sent!</h3>
+                <p>We'll get back to you as soon as possible.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="footer-logo">HD<span>Submit</span></span>
+            <div class="footer-divider"></div>
+            <span class="footer-mcc">An <a href="https://mccanalytics.com" target="_blank">MCCAnalytics</a> product</span>
+        </div>
+        <ul class="footer-links">
+            <li><a href="mailto:info@hdsubmit.com">info@hdsubmit.com</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+        <span class="footer-copy">&copy; 2025 HDSubmit. All rights reserved.</span>
+    </div>
+</footer>
+
+<script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // Contact form (basic — replace with your PHP handler)
+    const contactForm = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+    contactForm.addEventListener('submit', function(e) {
+        // If you're using a PHP backend, remove this preventDefault
+        // and let the form submit naturally.
+        // For now, this shows the success message client-side.
+        e.preventDefault();
+        contactForm.style.display = 'none';
+        formSuccess.classList.add('show');
+    });
+</script>
+
+</body>
+</html>
