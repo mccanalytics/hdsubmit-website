@@ -846,17 +846,13 @@
         });
     });
 
-    // Contact form (basic — replace with your PHP handler)
-    const contactForm = document.getElementById('contactForm');
-    const formSuccess = document.getElementById('formSuccess');
-    contactForm.addEventListener('submit', function(e) {
-        // If you're using a PHP backend, remove this preventDefault
-        // and let the form submit naturally.
-        // For now, this shows the success message client-side.
-        e.preventDefault();
+    // Show success message if redirected back after form submission
+    if (window.location.search.includes('submitted=1')) {
+        const contactForm = document.getElementById('contactForm');
+        const formSuccess = document.getElementById('formSuccess');
         contactForm.style.display = 'none';
         formSuccess.classList.add('show');
-    });
+    }
 </script>
 
 </body>
